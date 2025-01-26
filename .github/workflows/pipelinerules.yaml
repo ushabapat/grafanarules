@@ -1,0 +1,26 @@
+name: Deploy Grafana Rules
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'grafana/rules/**'
+
+jobs:
+  deploy-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Deploy Grafana Rules
+        run: |
+          GRAFANA_API_KEY=${{ secrets.GRAFANA_API_KEY }}
+          GRAFANA_URL="http://20.244.73.86/"
+          
+          # Example command to update Grafana rules
+          curl -X POST "$GRAFANA_URL/api/alert-rules" \
+            -H "Authorization: Bearer $GRAFANA_API_KEY" \
+            -H "Content-Type: application/json" \
+            --data-binary "@grafana/rules/my-rules.json"
