@@ -1,0 +1,46 @@
+{
+  "alert": {
+    "name": "High CPU Usage Alert",
+    "message": "CPU usage is above 90%",
+    "conditions": [
+      {
+        "evaluator": {
+          "params": [90],
+          "type": "gt"
+        },
+        "operator": {
+          "type": "and"
+        },
+        "query": {
+          "datasourceId": 1,
+          "model": {
+            "datasource": "Prometheus",
+            "expr": "100 - (avg by(instance) (irate(node_cpu_seconds_total{mode='idle'}[5m])) * 100)",
+            "interval": "",
+            "legendFormat": "CPU Usage",
+            "refId": "A"
+          },
+          "params": ["A", "5m", "now"]
+        },
+        "reducer": {
+          "params": [],
+          "type": "last"
+        },
+        "type": "query"
+      }
+    ],
+    "executionErrorState": "keep_state",
+    "frequency": "60s",
+    "handler": 1,
+    "noDataState": "no_data",
+    "notifications": [
+      {
+        "uid": "your-notification-channel-uid"
+      }
+    ]
+  },
+  "dashboardId": 1,
+  "panelId": 2,
+  "name": "High CPU Usage Alert",
+  "type": "alert"
+}
