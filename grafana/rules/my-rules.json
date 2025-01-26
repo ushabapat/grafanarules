@@ -1,46 +1,48 @@
 {
-  "alert": {
-    "name": "High CPU Usage Alert",
-    "message": "CPU usage is above 90%",
-    "conditions": [
+  "dashboard": {
+    "uid": "Kubernetes / Compute Resources / Namespace (Workloads)", // Replace with the actual UID of the "Kubernetes / Compute Resources / Namespace (Workloads)" dashboard
+    "panels": [
       {
-        "evaluator": {
-          "params": [90],
-          "type": "gt"
-        },
-        "operator": {
-          "type": "and"
-        },
-        "query": {
-          "datasourceId": 1,
-          "model": {
-            "datasource": "Prometheus",
-            "expr": "100 - (avg by(instance) (irate(node_cpu_seconds_total{mode='idle'}[5m])) * 100)",
-            "interval": "",
-            "legendFormat": "CPU Usage",
-            "refId": "A"
-          },
-          "params": ["A", "5m", "now"]
-        },
-        "reducer": {
-          "params": [],
-          "type": "last"
-        },
-        "type": "query"
-      }
-    ],
-    "executionErrorState": "keep_state",
-    "frequency": "60s",
-    "handler": 1,
-    "noDataState": "no_data",
-    "notifications": [
-      {
-        "uid": "your-notification-channel-uid"
+        "id": 2, // The panel ID where you want to add the alert rule
+        "type": "graph",
+        "title": "CPU Usage",
+        "alert": {
+          "name": "High CPU Usage Alert",
+          "message": "CPU usage is above the set threshold",
+          "conditions": [
+            {
+              "type": "query",
+              "query": {
+                "params": [
+                  "A", // The refId of the query you want to alert on
+                  "5m", // Over the last 5 minutes
+                  "now"
+                ]
+              },
+              "evaluator": {
+                "type": "gt",
+                "params": [90] // Threshold for the alert (90% CPU usage)
+              },
+              "operator": {
+                "type": "and"
+              },
+              "reducer": {
+                "type": "avg",
+                "params": []
+              }
+            }
+          ],
+          "executionErrorState": "keep_state",
+          "frequency": "60s",
+          "handler": 1,
+          "noDataState": "no_data",
+          "notifications": [
+            {
+              "uid": "grafana-default-email" // Replace with the actual UID of your notification channel
+            }
+          ]
+        }
       }
     ]
-  },
-  "dashboardId": 1,
-  "panelId": 2,
-  "name": "High CPU Usage Alert",
-  "type": "alert"
+  }
 }
