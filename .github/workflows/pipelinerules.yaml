@@ -14,13 +14,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      # - name: Deploy to Grafana
+      #   run: |
+      #       curl -X POST -u ${{ secrets.GRAFANA_USERNAME }}:${{ secrets.GRAFANA_PASSWORD }} -H "Content-Type: application/json" -d @grafana/dashboard.json https://your-grafana-instance.com/api/dashboards/db
+
       - name: Deploy Grafana Rules
         run: |
-          GRAFANA_API_KEY=${{ secrets.GRAFANA_API_KEY }}
-          GRAFANA_URL="http://20.244.73.86/"
+          GRAFANA_SERVICE_ACCOUNT_NAME=${{ secrets.GRAFANA_SERVICE_ACCOUNT_NAME }}
+          GRAFANA_API_TOKEN=${{ secrets.GRAFANA_API_TOKEN }}
+          GRAFANA_URL="http://20.244.73.86/login"
           
-          # Example command to update Grafana rules
+          # Command to update Grafana rules
           curl -X POST "$GRAFANA_URL/api/alert-rules" \
-            -H "Authorization: Bearer $GRAFANA_API_KEY" \
+            -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
             -H "Content-Type: application/json" \
             --data-binary "@grafana/rules/my-rules.json"
+
