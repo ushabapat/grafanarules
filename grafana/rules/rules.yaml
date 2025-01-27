@@ -9,5 +9,3 @@ groups:
         annotations:
           summary: High CPU usage detected
           description: 'Instance {{ $labels.instance }} CPU usage is above 90%.'
-          #testing12345678
-
