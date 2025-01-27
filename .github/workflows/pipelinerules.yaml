@@ -14,9 +14,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Deploy to Grafana
-        run: |
-            curl -X POST -u ${{ secrets.GRAFANA_USERNAME }}:${{ secrets.GRAFANA_PASSWORD }} -H "Content-Type: application/json" -d @grafana/dashboard.json https://your-grafana-instance.com/api/dashboards/db
+      # - name: Deploy to Grafana
+      #   run: |
+      #       curl -X POST -u ${{ secrets.GRAFANA_USERNAME }}:${{ secrets.GRAFANA_PASSWORD }} -H "Content-Type: application/json" -d @grafana/dashboard.json https://your-grafana-instance.com/api/dashboards/db
 
       - name: Deploy Grafana Rules
         run: |
