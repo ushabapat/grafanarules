@@ -29,7 +29,8 @@ jobs:
           curl -v -L -X POST "$GRAFANA_URL/api/v1/provisioning/alert-rules/import" \
             -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
             -H "Content-Type: application/json" \
-            --data-binary "/home/runner/work/grafanarules/grafanarules/grafana/rules/rules1.json" -w "\nHTTP status code: %{http_code}\n"
+            -H "X-Disable-Provenance: true" \
+            --data-binary "@grafana/rules/rules1.json" -w "\nHTTP status code: %{http_code}\n"
 
 
 
