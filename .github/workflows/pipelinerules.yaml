@@ -28,5 +28,5 @@ jobs:
           curl -X POST "$GRAFANA_URL/api/alert-rules" \
             -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
             -H "Content-Type: application/json" \
-            --data-binary "@grafana/rules/my-rules.json"
+            --data-binary "@grafana/rules/rules.yaml"
 
