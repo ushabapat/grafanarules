@@ -8,4 +8,4 @@ groups:
           severity: critical
         annotations:
           summary: High CPU usage detected
-          description: 'Instance {{ $labels.instance }} CPU usage is above 90%.'
+          description: 'Instance {{ $labels.instance }} CPUusage is above 90%.'
