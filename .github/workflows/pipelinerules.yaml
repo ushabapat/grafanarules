@@ -25,12 +25,10 @@ jobs:
           GRAFANA_URL="http://20.244.73.86/login"
           
           # Command to update Grafana rules
-          curl -X POST "$GRAFANA_URL/api/alert-rules" \
+          curl-v -L -X POST "$GRAFANA_URL/api/alert-rules" \
             -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
             -H "Content-Type: application/json" \
             --data-binary "@grafana/rules/rules.yaml" -w "\nHTTP status code: %{http_code}\n"
 
-          env:
-            GRAFANA_API_TOKEN: ${{ secrets.GRAFANA_API_TOKEN }}
 
 
