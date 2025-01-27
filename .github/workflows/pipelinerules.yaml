@@ -22,7 +22,7 @@ jobs:
         run: |
           GRAFANA_SERVICE_ACCOUNT_NAME=${{ secrets.GRAFANA_SERVICE_ACCOUNT_NAME }}
           GRAFANA_API_TOKEN=${{ secrets.GRAFANA_API_TOKEN }}
-          GRAFANA_URL="http://20.244.73.86/login"
+          GRAFANA_URL="http://20.244.73.86"
           
           # Command to update Grafana rules
           curl -v -L -X POST "$GRAFANA_URL/api/alert-rules" \
