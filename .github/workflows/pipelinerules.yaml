@@ -18,15 +18,22 @@ jobs:
       #   run: |
       #       curl -X POST -u ${{ secrets.GRAFANA_USERNAME }}:${{ secrets.GRAFANA_PASSWORD }} -H "Content-Type: application/json" -d @grafana/dashboard.json https://your-grafana-instance.com/api/dashboards/db
 
-      - name: Deploy Grafana Rules
-        run: |
-          GRAFANA_SERVICE_ACCOUNT_NAME=${{ secrets.GRAFANA_SERVICE_ACCOUNT_NAME }}
-          GRAFANA_API_TOKEN=${{ secrets.GRAFANA_API_TOKEN }}
-          GRAFANA_URL="http://20.244.73.86/login"
+      # - name: Deploy Grafana Rules
+      #   run: |
+      #     GRAFANA_SERVICE_ACCOUNT_NAME=${{ secrets.GRAFANA_SERVICE_ACCOUNT_NAME }}
+      #     GRAFANA_API_TOKEN=${{ secrets.GRAFANA_API_TOKEN }}
+      #     GRAFANA_URL="http://20.244.73.86/login"
           
-          # Command to update Grafana rules
-          curl -X POST "$GRAFANA_URL/api/alert-rules" \
-            -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
-            -H "Content-Type: application/json" \
-            --data-binary "@grafana/rules/rules.yaml"
+      #     # Command to update Grafana rules
+      #     curl -X POST "$GRAFANA_URL/api/alert-rules" \
+      #       -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
+      #       -H "Content-Type: application/json" \
+      #       --data-binary "@grafana/rules/rules.yaml"
+
+      - name: Sync Alert Rules
+        run: |
+          curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer ${{ secrets.GRAFANA_API_TOKEN }}" --data-binary "@grafana/rules/rules.yaml" https://20.244.73.86/api/prometheus/rules -w "\nHTTP status code: %{http_code}\n"
+        env:
+          GRAFANA_API_TOKEN: ${{ secrets.GRAFANA_API_TOKEN }}
+
 
