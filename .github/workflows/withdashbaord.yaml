@@ -1,0 +1,43 @@
+name: Import Grafana Rules
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'grafana-rules/**'
+
+jobs:
+  import-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Import dashboards to Grafana
+        run: |
+          GRAFANA_API_TOKEN=${{ secrets.GRAFANA_API_TOKEN }}
+          GRAFANA_URL=${{ secrets.GRAFANA_URL }}
+          DASHBOARDS_FOLDER='grafana-rules'
+          ALERTS_FOLDER='grafana-rules/alerts'
+
+          # Import dashboards
+          for file in $(find $DASHBOARDS_FOLDER -maxdepth 1 -name '*.json'); do
+            echo "Importing dashboard $(basename $file) to Grafana"
+            curl -X POST "$GRAFANA_URL/api/dashboards/db" \
+              -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data-binary "@$file"
+          done
+
+          # Import alert rules (if applicable)
+          for file in $(find $ALERTS_FOLDER -name '*.json'); do
+            echo "Importing alert rule $(basename $file) to Grafana"
+            curl -X POST "$GRAFANA_URL/api/alert-notifications" \
+              -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data-binary "@$file"
+          done
+        env:
+          GRAFANA_API_TOKEN: ${{ secrets.GRAFANA_API_TOKEN }}
+          GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
