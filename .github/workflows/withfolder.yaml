@@ -1,0 +1,33 @@
+name: Import Grafana Rules
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'path/to/rules/**'
+
+jobs:
+  import-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Import rules to Grafana
+        run: |
+          GRAFANA_API_TOKEN=${{ secrets.GRAFANA_API_TOKEN }}
+          GRAFANA_URL=${{ secrets.GRAFANA_URL }}
+          RULES_FOLDER='path/to/rules'
+          TARGET_FOLDER_ID='your-target-folder-id-in-grafana'
+
+          for file in $(find $RULES_FOLDER -name '*.json'); do
+            echo "Importing $(basename $file) to Grafana"
+            curl -X POST "$GRAFANA_URL/api/folders/$TARGET_FOLDER_ID/dashboards/import" \
+              -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data-binary "@$file"
+          done
+        env:
+          GRAFANA_API_TOKEN: ${{ secrets.GRAFANA_API_TOKEN }}
+          GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
