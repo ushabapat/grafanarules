@@ -1,11 +1,37 @@
+# groups:
+#   - name: example
+#     rules:
+#       - alert: HighCPUUsage
+#         expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode='idle'}[5m])) * 100) > 90
+#         for: 5m
+#         labels:
+#           severity: critical
+#         annotations:
+#           summary: High CPU usage detected
+#           description: 'Instance {{ $labels.instance }} CPU usage is above 90%.'
+
+namespace: example_namespace
+
 groups:
-  - name: example
+
+  - name: example_rule_group
+
+    interval: 1m
+
     rules:
-      - alert: HighCPUUsage
-        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode='idle'}[5m])) * 100) > 90
-        for: 5m
+
+      - alert: HighRequestLatency
+
+        expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+
+        for: 10m
+
         labels:
+
           severity: critical
+
         annotations:
-          summary: High CPU usage detected
-          description: 'Instance {{ $labels.instance }} CPU usage is above 90%.'
+
+          summary: "High request latency detected for job {{ $labels.job }}"
+
+          description: "The average request latency over the last 5 minutes is above 0.5 seconds for job {{ $labels.job }}."
